@@ -22,7 +22,10 @@ game_display = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 pygame.display.set_caption("Tower Defense")
 clock = pygame.time.Clock()
 
-tower_img = pygame.image.load("guard_tower.png")
+background_img = pygame.image.load("grass_background.png")
+
+tower_img = pygame.image.load("guard_tower.png").convert()
+tower_img.set_colorkey((255, 255, 255))
 
 
 def tower(x, y):
@@ -48,7 +51,7 @@ def make_zombie_herd(num_of_zombies, game_display, WINDOW_HEIGHT):
     Returns: a list of zombies
     """
     zombie_herd = list()
-    for i in range(0, num_of_zombies):
+    for _ in range(0, num_of_zombies):
         start_x_pos = random.randint(-100, 0)
         start_y_pos = WINDOW_HEIGHT * random.uniform(0.1, 0.9)
         zombie_herd.append(Zombie(start_x_pos, start_y_pos, game_display))
@@ -58,18 +61,18 @@ def make_zombie_herd(num_of_zombies, game_display, WINDOW_HEIGHT):
 
 def move_zombie_herd(zombie_herd):
     """Moves a herd of zombies
-    
-    Simply calls move() (with default delta) on 
+
+    Simply calls move() (with default delta) on
     all the zombies in a given zombie herd
-    
-    Args: 
+
+    Args:
         zombie_herd: the herd of zombies to be moved along the display
     """
     for zombie in zombie_herd:
         zombie.move()
 
 
-zombie_herd = make_zombie_herd(5, game_display, WINDOW_HEIGHT)
+zombie_herd = make_zombie_herd(500, game_display, WINDOW_HEIGHT)
 
 crashed = False
 
@@ -78,8 +81,8 @@ while not crashed:
         if event.type == pygame.QUIT:
             crashed = True
 
-    game_display.fill(WHITE)
-    tower(x_tower, y_tower)
+    game_display.blit(background_img, (0, 0))
+    # tower(x_tower, y_tower)
 
     move_zombie_herd(zombie_herd)
 
