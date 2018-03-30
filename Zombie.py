@@ -27,7 +27,6 @@ class Zombie(pygame.sprite.Sprite):
 
         spritesheet = SpriteSheet("Apple_Zombie.png")
         self.walking_frames_list = list()
-        self.walking_frames_list.append(spritesheet.get_image(0, 65, 52, 63))
         self.walking_frames_list.append(spritesheet.get_image(63, 65, 52, 63))
         self.walking_frames_list.append(spritesheet.get_image(126, 65, 52, 63))
         self.walking_frames_list.append(spritesheet.get_image(191, 65, 52, 63))
@@ -55,3 +54,7 @@ class Zombie(pygame.sprite.Sprite):
 
     def displayZombie(self):
         print("Coordinates: ({}, {})".format(self.x, self.y))
+
+    def __del__(self):
+        print("Zombie deleted!")
+        self.zombie_count -= 1
