@@ -72,13 +72,51 @@ herd_of_zombies = make_zombie_herd(size_of_herd, GAME_DISPLAY)
 # Time to begin waiting for next wave of zombies
 begin_wait_time = 0
 
+class Cannon(pygame.sprite.Sprite):
+    def __init__(self, color):
+        super().__init__()
+        self.image = pygame.Surface([20, 15])
+        self.image.fill(color)
+        self.rect = self.image.get_rect()
+
+class Bullet(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+
+        self.image = pygame.Surface([4, 10])
+        self.image.fill(BLACK)
+
+        self.rect = self.image.get_rect()
+
+    def update(self):
+        self.rect.x -= 3
+
+cannons = pygame.sprite.Group()
+bullets = pygame.sprite.Group()
+
 while running and zombies_past_perimeter < 100:
+    x_mouse = 0
+    y_mouse = 0
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            mouse_position = pygame.mouse.get_pos()
-            print(mouse_position)
+            x_mouse = event.pos[0]
+            y_mouse = event.pos[1]
+            cannon = Cannon(BLACK)
+            cannon.rect.x = x_mouse
+            cannon.rect.y = y_mouse
+            cannons.add(cannon)
+
+
+    bullet = Bullet()
+    bullet.rect.x = x_mouse - 25
+    bullet.rect.y = y_mouse
+    bullets.add(bullet)
+    
+
+    cannons.update()
+    bullets.update()
 
     GAME_DISPLAY.blit(background_img, (0, 0))
 
@@ -96,6 +134,17 @@ while running and zombies_past_perimeter < 100:
     # If zombie waves are allowed to attack then move them across the screen
     if gates_of_hell_open:
         move_zombie_herd(herd_of_zombies, zombies_past_perimeter)
+
+    cannons.draw(GAME_DISPLAY)
+    bullets.draw(GAME_DISPLAY)
+
+    for bullet in bullets:
+        hit_list = pygame.sprite.spritecollide(bullet, cannons, True)
+        for c in hit_list:
+            bullets.remove(bullet)
+
+        if bullet.rect.x < -10:
+            bullets.remove(bullet)
 
     pygame.display.update()
 
