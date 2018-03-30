@@ -12,8 +12,10 @@ class Cannon(pygame.sprite.Sprite):
 
     cannon_count = 0
 
-    def __init__(self, color):
+    def __init__(self, color, x, y):
         super().__init__()
         self.image = pygame.Surface([20, 15])
         self.image.fill(color)
         self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
