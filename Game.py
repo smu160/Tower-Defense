@@ -81,13 +81,14 @@ while running and zombies_past_perimeter < 100:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        elif event.type == pygame.MOUSEBUTTONDOWN:
+        elif event.type == pygame.MOUSEMOTION:
             x_mouse = event.pos[0]
             y_mouse = event.pos[1]
-            cannon = Cannon(BLACK)
-            cannon.rect.x = x_mouse
-            cannon.rect.y = y_mouse
-            cannons.add(cannon)
+            cannon = Cannon(BLACK, x_mouse, y_mouse)
+            if pygame.mouse.get_pressed()[0]:
+                cannons.add(cannon)
+            else:
+                del cannon
 
     bullet = Bullet()
     bullet.rect.x = x_mouse - 25
@@ -105,7 +106,7 @@ while running and zombies_past_perimeter < 100:
         begin_wait_time = time.time()
         gates_of_hell_open = False
         size_of_herd += random.randint(3, 6)
-        herd_of_zombies = make_zombie_herd(size_of_herd, GAME_DISPLAY)
+        herd_of_zombies = make_zombie_herd(size_of_herd)
 
     if not gates_of_hell_open:
         if time.time() - begin_wait_time >= 10:
