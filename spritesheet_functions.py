@@ -2,7 +2,7 @@
 """
 Created on Tue Mar 20 18:58:47 2018
 
-@author:
+@authors: Saveliy Yusufov and Michael Harley
 """
 import pygame
 
