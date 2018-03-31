@@ -79,20 +79,21 @@ bullets = pygame.sprite.Group()
 scoreboard = Scoreboard()
 scoreSprite = pygame.sprite.Group(scoreboard)
 
-x_mouse = 0
-y_mouse = 0
-
 # Game loop
 while running and scoreboard.score < 100:
+    x_mouse = 0
+    y_mouse = 0
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        elif event.type == pygame.MOUSEMOTION:
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            pass
+        elif event.type == pygame.MOUSEBUTTONUP:
+            print(event.pos)
             x_mouse = event.pos[0]
             y_mouse = event.pos[1]
-            if pygame.mouse.get_pressed()[0]:
-                cannon = Cannon(BLACK, x_mouse, y_mouse)
-                cannons.add(cannon)
+            cannon = Cannon(BLACK, x_mouse, y_mouse)
+            cannons.add(cannon)
 
     bullet = Bullet()
     bullet.rect.x = x_mouse - 25
@@ -136,7 +137,7 @@ while running and scoreboard.score < 100:
             bullets.remove(bullet)
             herd_of_zombies.remove(hit_zombie)
 
-        if bullet.rect.x < -10:
+        if bullet.rect.x < 0:
             bullets.remove(bullet)
 
     pygame.display.update()
