@@ -162,7 +162,7 @@ while running:
 
     if not game_over:
         cannons.draw(GAME_DISPLAY)
-        bullets.draw(GAME_DISPLAY)
+        # bullets.draw(GAME_DISPLAY)
         herd_of_zombies.draw(GAME_DISPLAY)
         scoreSprite.draw(GAME_DISPLAY)
     
@@ -184,6 +184,7 @@ while running:
                 bullets.add(bullet)
             
             bullets.update("north", zombie.rect.x, zombie.rect.y)
+            bullets.draw(GAME_DISPLAY)
             
             # Check for bullet - zombie collisions
             for bullet in bullets:
@@ -196,7 +197,7 @@ while running:
                     bullets.remove(bullet)
                     
             bullets.update("north", zombie.rect.x, zombie.rect.y)
-            
+            bullets.draw(GAME_DISPLAY)
             
                 
         # bullets.draw(GAME_DISPLAY)
