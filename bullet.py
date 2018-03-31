@@ -14,7 +14,7 @@ class Bullet(pygame.sprite.Sprite):
 
     def __init__(self):
         super().__init__()
-        self.image = pygame.Surface([4, 10])
+        self.image = pygame.Surface([4, 2])
         self.image.fill(BLACK)
         self.rect = self.image.get_rect()
 
@@ -23,4 +23,4 @@ class Bullet(pygame.sprite.Sprite):
 
         Args:
         """
-        self.rect.x -= 3
+        self.rect.x -= 6
