@@ -19,10 +19,49 @@ class Bullet(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
-
-    def update(self):
+        
+        
+    def shoot(self, direction, enemy_x, enemy_y):
+        if direction == "north":
+            if enemy_x < self.rect.x:
+                self.rect.x -= 3
+                self.rect.y -= 3
+            elif enemy_x > self.rect.x:
+                self.rect.x += 3
+                self.rect.y -= 3
+            else:
+                self.rect.y -= 3
+        elif direction == "east":
+            if enemy_y < self.rect.y:
+                self.rect.x += 3
+                self.rect.y -= 3
+            elif enemy_y > self.rect.y:
+                self.rect.x += 3
+                self.rect.y += 3
+            else:
+                self.rect.x += 3
+        elif direction == "west":
+            if enemy_y < self.rect.x:
+                self.rect.x -= 3
+                self.rect.y -= 3
+            elif enemy_y > self.rect.x:
+                self.rect.x -= 3
+                self.rect.y += 3
+            else:
+                self.rect.x -= 3
+        if direction == "south":
+            if enemy_x < self.rect.x:
+                self.rect.x -= 3
+                self.rect.y += 3
+            elif enemy_x > self.rect.x:
+                self.rect.x += 3
+                self.rect.y += 3
+            else:
+                self.rect.y += 3
+        
+    def update(self, direction, enemy_x, enemy_y):
         """Overriden sprite function
 
         Args:
         """
-        self.rect.x -= 6
+        self.shoot(direction, enemy_x, enemy_y)
