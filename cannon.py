@@ -5,6 +5,7 @@ Created on Thu Mar 29 22:43:28 2018
 @authors: Saveliy Yusufov and Michael Harley
 """
 import pygame
+from bullet import Bullet  
 
 
 class Cannon(pygame.sprite.Sprite):
@@ -19,10 +20,25 @@ class Cannon(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
+        #self.bullets = pygame.sprite.Group()
 
     def draw(self, x, y):
         self.rect.x = x
         self.rect.y = y
+
+    #def create_bullet(self):
+        #bullet = Bullet(self.rect.x, self.rect.y - 25)
+        #self.bullets.add(bullet)
         
-    def fire():
-        pass
+    #def fire(self, game_display):
+        #self.bullets.update()
+        #self.bullets.draw(game_display)
+
+    #def update(self, game_display):
+     #   bullet = Bullet(self.rect.x - 25, self.rect.y)
+      #  self.bullets.add(bullet)
+       # self.bullets.update()
+        #self.bullets.draw(game_display)
+        
+
+

@@ -15,6 +15,7 @@ from Zombie import Zombie
 WINDOW_WIDTH = 800
 WINDOW_HEIGHT = 600
 BLACK = (0, 0, 0)
+GREEN = (0, 255, 0)
 
 pygame.init()
 CLOCK = pygame.time.Clock()
@@ -80,6 +81,11 @@ scoreSprite = pygame.sprite.Group(scoreboard)
 
 game_over = False
 
+button_clicked = False
+dragging = False
+
+m = 0
+
 # Game loop
 while running:
     x_mouse = 0
@@ -90,32 +96,50 @@ while running:
         elif event.type == pygame.MOUSEBUTTONDOWN:
             # <-- handle game play on mouse button down here -->
             # <-- e.g. highlighting cannon icon -->
-            pass
+            button_clicked = True
         elif event.type == pygame.MOUSEBUTTONUP:
             print(event.pos)
             x_mouse = event.pos[0]
             y_mouse = event.pos[1]
-            cannon = Cannon(BLACK, x_mouse, y_mouse)
-            cannons.add(cannon)
-            cannons_list.append(cannon)
+            if button_clicked and dragging:
+                cannon = Cannon(BLACK, x_mouse, y_mouse)
+                cannons.add(cannon)
+                cannons_list.clear()
+                print(cannons)
+                #print(cannons_list)
+                cannons_list.append(cannon)
+            button_clicked = False
+            dragging = False
+
 
     cannon_pos = pygame.mouse.get_pos()
     cannon_pos_x = cannon_pos[0]
     cannon_pos_y = cannon_pos[1]
-    if cannons_list:
+    if cannons_list and button_clicked and dragging:
         cannons_list[0].draw(cannon_pos_x, cannon_pos_y)
+    
+    if m % 30 == 0:   
+        for cannon in cannons:
+            bullet = Bullet(cannon.rect.x - 25, cannon.rect.y)
+            bullets.add(bullet)
+    m = m + 1
 
-    bullet = Bullet()
-    bullet.rect.x = x_mouse - 25
-    bullet.rect.y = y_mouse
-    bullets.add(bullet)
-
-    cannons.update()
+    cannons.update(GAME_DISPLAY)
     bullets.update()
     herd_of_zombies.update()
     scoreSprite.update()
 
     GAME_DISPLAY.blit(background_img, (0, 0))
+
+    
+    if 50 <= cannon_pos_x <= 100 and 500 <= cannon_pos_y <= 550 and button_clicked:
+        pygame.draw.rect(GAME_DISPLAY, GREEN, pygame.Rect(50, 500, 50, 50))
+        dragging = True
+    if dragging:
+        pygame.draw.rect(GAME_DISPLAY, GREEN, pygame.Rect(50, 500, 50, 50))
+    else:
+        pygame.draw.rect(GAME_DISPLAY, BLACK, pygame.Rect(50, 500, 50, 50))
+
 
     # Check if the wave of zombies is empty, start the timer, don't allow waves
     # increment size of herd, and create a new herd to send as next wave

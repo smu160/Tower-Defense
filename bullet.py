@@ -12,11 +12,13 @@ BLACK = (0, 0, 0)
 class Bullet(pygame.sprite.Sprite):
     "Common base class for all bullets"
 
-    def __init__(self):
+    def __init__(self, x, y):
         super().__init__()
         self.image = pygame.Surface([4, 2])
         self.image.fill(BLACK)
         self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
 
     def update(self):
         """Overriden sprite function
