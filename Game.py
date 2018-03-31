@@ -61,6 +61,15 @@ def move_zombie_herd(zombie_group):
         if zombie.x > WINDOW_WIDTH:
             zombie_group.remove(zombie)
             scoreboard.increment_score()
+            
+def display_game_over():
+    text = pygame.font.Font(None, 50).render("Game Over!", True, (255, 255, 0))
+    text_rect = text.get_rect()
+    text_x = GAME_DISPLAY.get_width() / 2 - text_rect.width / 2
+    text_y = GAME_DISPLAY.get_height() / 2 - text_rect.height / 2
+    stats = pygame.font.Font(None, 36).render("You held off {} waves".format(str(scoreboard.wave)), True, (255, 255, 0))
+    GAME_DISPLAY.blit(text, [text_x, text_y])
+    GAME_DISPLAY.blit(stats, [text_x-25, text_y+50])
 
 running = True
 gates_of_hell_open = True
@@ -157,20 +166,12 @@ while running:
         herd_of_zombies.draw(GAME_DISPLAY)
         scoreSprite.draw(GAME_DISPLAY)
     
-    if scoreboard.score >= 100:
+    if scoreboard.score >= 1:
         game_over = True
     
     # If game over is true, draw Game Over and display player's stats
     if game_over:
-        text = pygame.font.Font(None, 50).render("Game Over!", True, (255, 255, 0))
-        text_rect = text.get_rect()
-        text_x = GAME_DISPLAY.get_width() / 2 - text_rect.width / 2
-        text_y = GAME_DISPLAY.get_height() / 2 - text_rect.height / 2
-        GAME_DISPLAY.blit(text, [text_x, text_y])
-        
-        stats = pygame.font.Font(None, 36).render("You held off {} waves".format(str(scoreboard.wave)), True, (255, 255, 0))
-        GAME_DISPLAY.blit(stats, [text_x-25, text_y+50])
-
+        display_game_over()
 
     # Check if zombie is within radius of any cannon
     for cannon in cannons:
