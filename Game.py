@@ -17,11 +17,9 @@ WINDOW_HEIGHT = 600
 BLACK = (0, 0, 0)
 
 pygame.init()
+CLOCK = pygame.time.Clock()
 GAME_DISPLAY = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 pygame.display.set_caption("Tower Defense")
-CLOCK = pygame.time.Clock()
-
-# zombies_past_perimeter = 0
 background_img = pygame.image.load("grass_background.png").convert()
 
 
@@ -47,7 +45,6 @@ def make_zombie_herd(num_of_zombies):
 
     return zombie_herd
 
-
 def move_zombie_herd(zombie_group):
     """Moves a herd of zombies
 
@@ -64,7 +61,6 @@ def move_zombie_herd(zombie_group):
             zombie_group.remove(zombie)
             scoreboard.increment_score()
 
-
 running = True
 gates_of_hell_open = True
 size_of_herd = 10
@@ -76,17 +72,24 @@ begin_wait_time = 0
 cannons = pygame.sprite.Group()
 bullets = pygame.sprite.Group()
 
+# temporary 
+cannons_list = list()
+
 scoreboard = Scoreboard()
 scoreSprite = pygame.sprite.Group(scoreboard)
 
+game_over = False
+
 # Game loop
-while running and scoreboard.score < 100:
+while running:
     x_mouse = 0
     y_mouse = 0
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
+            # <-- handle game play on mouse button down here -->
+            # <-- e.g. highlighting cannon icon -->
             pass
         elif event.type == pygame.MOUSEBUTTONUP:
             print(event.pos)
@@ -94,6 +97,13 @@ while running and scoreboard.score < 100:
             y_mouse = event.pos[1]
             cannon = Cannon(BLACK, x_mouse, y_mouse)
             cannons.add(cannon)
+            cannons_list.append(cannon)
+
+    cannon_pos = pygame.mouse.get_pos()
+    cannon_pos_x = cannon_pos[0]
+    cannon_pos_y = cannon_pos[1]
+    if cannons_list:
+        cannons_list[0].draw(cannon_pos_x, cannon_pos_y)
 
     bullet = Bullet()
     bullet.rect.x = x_mouse - 25
@@ -116,21 +126,37 @@ while running and scoreboard.score < 100:
         scoreboard.increment_wave()
         herd_of_zombies = make_zombie_herd(size_of_herd)
 
-    # If 10 sec passed since the last wave, let the next zombie wave through
+    # If 10 secs passed since last wave, then release the next zombie wave 
     if not gates_of_hell_open:
         if time.time() - begin_wait_time >= 10:
             gates_of_hell_open = True
-            
 
-    # If zombie waves are allowed to attack then move them across the screen
-    if gates_of_hell_open:
+    # If zombie waves are allowed to attack AND the game is not over, then 
+    # move the zombie wave across the screen
+    if gates_of_hell_open and not game_over:
         move_zombie_herd(herd_of_zombies)
 
-    cannons.draw(GAME_DISPLAY)
-    bullets.draw(GAME_DISPLAY)
-    herd_of_zombies.draw(GAME_DISPLAY)
-    scoreSprite.draw(GAME_DISPLAY)
+    if not game_over:
+        cannons.draw(GAME_DISPLAY)
+        bullets.draw(GAME_DISPLAY)
+        herd_of_zombies.draw(GAME_DISPLAY)
+        scoreSprite.draw(GAME_DISPLAY)
+    
+    if scoreboard.score >= 100:
+        game_over = True
+    
+    # If game over is true, draw Game Over and display player's stats
+    if game_over:
+        text = pygame.font.Font(None, 50).render("Game Over!", True, (255, 255, 0))
+        text_rect = text.get_rect()
+        text_x = GAME_DISPLAY.get_width() / 2 - text_rect.width / 2
+        text_y = GAME_DISPLAY.get_height() / 2 - text_rect.height / 2
+        GAME_DISPLAY.blit(text, [text_x, text_y])
+        
+        stats = pygame.font.Font(None, 36).render("You held off {} waves".format(str(scoreboard.wave)), True, (255, 255, 0))
+        GAME_DISPLAY.blit(stats, [text_x-25, text_y+50])
 
+    # Check for bullet/zombie collisions
     for bullet in bullets:
         hit_list = pygame.sprite.spritecollide(bullet, herd_of_zombies, True)
         for hit_zombie in hit_list:
@@ -142,8 +168,7 @@ while running and scoreboard.score < 100:
 
     pygame.display.update()
 
-    # Frames Per Second (FPS)
-    # Will block execution until 1/60 seconds have passed since the previous 
+    # Will block execution until 1/60 secs have passed since the previous
     # time clock.tick was called.
     CLOCK.tick(60)
 
