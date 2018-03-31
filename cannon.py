@@ -23,3 +23,6 @@ class Cannon(pygame.sprite.Sprite):
     def draw(self, x, y):
         self.rect.x = x
         self.rect.y = y
+        
+    def fire():
+        pass
