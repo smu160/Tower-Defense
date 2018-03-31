@@ -9,6 +9,7 @@ import time
 import pygame
 from bullet import Bullet
 from cannon import Cannon
+from scoreboard import Scoreboard
 from Zombie import Zombie
 
 WINDOW_WIDTH = 800
@@ -20,7 +21,7 @@ GAME_DISPLAY = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 pygame.display.set_caption("Tower Defense")
 CLOCK = pygame.time.Clock()
 
-zombies_past_perimeter = 0
+# zombies_past_perimeter = 0
 background_img = pygame.image.load("grass_background.png").convert()
 
 
@@ -47,7 +48,7 @@ def make_zombie_herd(num_of_zombies):
     return zombie_herd
 
 
-def move_zombie_herd(zombie_group, zombies_past_perim):
+def move_zombie_herd(zombie_group):
     """Moves a herd of zombies
 
     This function calls the zombie class move() function (with default delta)
@@ -60,8 +61,8 @@ def move_zombie_herd(zombie_group, zombies_past_perim):
     """
     for zombie in zombie_group:
         if zombie.x > WINDOW_WIDTH:
-            zombies_past_perim += 1
             zombie_group.remove(zombie)
+            scoreboard.increment_score()
 
 
 running = True
@@ -75,20 +76,23 @@ begin_wait_time = 0
 cannons = pygame.sprite.Group()
 bullets = pygame.sprite.Group()
 
-while running and zombies_past_perimeter < 100:
-    x_mouse = 0
-    y_mouse = 0
+scoreboard = Scoreboard()
+scoreSprite = pygame.sprite.Group(scoreboard)
+
+x_mouse = 0
+y_mouse = 0
+
+# Game loop
+while running and scoreboard.score < 100:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
         elif event.type == pygame.MOUSEMOTION:
             x_mouse = event.pos[0]
             y_mouse = event.pos[1]
-            cannon = Cannon(BLACK, x_mouse, y_mouse)
             if pygame.mouse.get_pressed()[0]:
+                cannon = Cannon(BLACK, x_mouse, y_mouse)
                 cannons.add(cannon)
-            else:
-                del cannon
 
     bullet = Bullet()
     bullet.rect.x = x_mouse - 25
@@ -98,27 +102,33 @@ while running and zombies_past_perimeter < 100:
     cannons.update()
     bullets.update()
     herd_of_zombies.update()
+    scoreSprite.update()
 
     GAME_DISPLAY.blit(background_img, (0, 0))
 
-    # Check if the wave of zombies is empty
+    # Check if the wave of zombies is empty, start the timer, don't allow waves
+    # increment size of herd, and create a new herd to send as next wave
     if len(herd_of_zombies) == 0:
         begin_wait_time = time.time()
         gates_of_hell_open = False
         size_of_herd += random.randint(3, 6)
+        scoreboard.increment_wave()
         herd_of_zombies = make_zombie_herd(size_of_herd)
 
+    # If 10 sec passed since the last wave, let the next zombie wave through
     if not gates_of_hell_open:
         if time.time() - begin_wait_time >= 10:
             gates_of_hell_open = True
+            
 
     # If zombie waves are allowed to attack then move them across the screen
     if gates_of_hell_open:
-        move_zombie_herd(herd_of_zombies, zombies_past_perimeter)
+        move_zombie_herd(herd_of_zombies)
 
     cannons.draw(GAME_DISPLAY)
     bullets.draw(GAME_DISPLAY)
     herd_of_zombies.draw(GAME_DISPLAY)
+    scoreSprite.draw(GAME_DISPLAY)
 
     for bullet in bullets:
         hit_list = pygame.sprite.spritecollide(bullet, herd_of_zombies, True)
@@ -132,8 +142,8 @@ while running and zombies_past_perimeter < 100:
     pygame.display.update()
 
     # Frames Per Second (FPS)
-    # Will block execution until 1/60 seconds have passed
-    # since the previous time clock.tick was called.
+    # Will block execution until 1/60 seconds have passed since the previous 
+    # time clock.tick was called.
     CLOCK.tick(60)
 
 pygame.display.quit()
