@@ -10,13 +10,8 @@ import pygame
 from cannon import Cannon
 from scoreboard import Scoreboard
 from Zombie import Zombie
-
-BLACK = (0, 0, 0)
-BROWN = (139, 69, 19)
-GREEN = (0, 255, 0)
-WINDOW_WIDTH = 800
-WINDOW_HEIGHT = 600
-FPS = 60
+from button import Button
+from constants import *
 
 pygame.init()
 CLOCK = pygame.time.Clock()
@@ -98,6 +93,8 @@ scoreboard = Scoreboard()
 cannons = pygame.sprite.Group()
 bullets = pygame.sprite.Group()
 score_sprite = pygame.sprite.Group(scoreboard)
+button = Button(GAME_DISPLAY, BROWN, 10, 540, 50, 50)
+button_sprite = pygame.sprite.Group(button)
 
 x_mouse = 0
 y_mouse = 0
@@ -129,6 +126,7 @@ while running:
 
     cannons.update(GAME_DISPLAY)
     score_sprite.update()
+    button_sprite.update("null")
 
     GAME_DISPLAY.blit(background_img, (0, 0))
 
@@ -138,12 +136,10 @@ while running:
     cannon_pos_y = cannon_pos[1]
 
     if 10 <= cannon_pos_x <= 60 and 540 <= cannon_pos_y <= 590 and button_clicked:
-        pygame.draw.rect(GAME_DISPLAY, BROWN, pygame.Rect(15, 545, 40, 40))
+        button_sprite.update("shrink")
         dragging = True
-    if dragging:
-        pygame.draw.rect(GAME_DISPLAY, BROWN, pygame.Rect(15, 545, 40, 40))
-    else:
-        pygame.draw.rect(GAME_DISPLAY, BROWN, pygame.Rect(10, 540, 50, 50))
+    elif dragging:
+        button_sprite.update("shrink")
 
     if button_clicked and dragging and scoreboard.cannons > 0:
         drag_cannon.display(GAME_DISPLAY, cannon_pos_x, cannon_pos_y)
@@ -180,6 +176,7 @@ while running:
     if not game_over:
         cannons.draw(GAME_DISPLAY)
         score_sprite.draw(GAME_DISPLAY)
+        button_sprite.draw(GAME_DISPLAY)
 
     if scoreboard.score >= 100:
         game_over = True
