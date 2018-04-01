@@ -12,10 +12,11 @@ from cannon import Cannon
 from scoreboard import Scoreboard
 from Zombie import Zombie
 
-WINDOW_WIDTH = 800
-WINDOW_HEIGHT = 600
 BLACK = (0, 0, 0)
 GREEN = (0, 255, 0)
+WINDOW_WIDTH = 800
+WINDOW_HEIGHT = 600
+FPS = 60
 
 pygame.init()
 CLOCK = pygame.time.Clock()
@@ -61,7 +62,7 @@ def move_zombie_herd(zombie_group):
         if zombie.x > WINDOW_WIDTH:
             zombie_group.remove(zombie)
             scoreboard.increment_score()
-            
+
 def display_game_over():
     text = pygame.font.Font(None, 50).render("Game Over!", True, (255, 255, 0))
     text_rect = text.get_rect()
@@ -82,14 +83,13 @@ begin_wait_time = 0
 cannons = pygame.sprite.Group()
 bullets = pygame.sprite.Group()
 
-# temporary 
+# temporary
 cannons_list = list()
 
 scoreboard = Scoreboard()
 scoreSprite = pygame.sprite.Group(scoreboard)
 
 game_over = False
-
 button_clicked = False
 dragging = False
 
@@ -118,15 +118,13 @@ while running:
             button_clicked = False
             dragging = False
 
-
     cannon_pos = pygame.mouse.get_pos()
     cannon_pos_x = cannon_pos[0]
     cannon_pos_y = cannon_pos[1]
     if cannons_list and button_clicked and dragging:
         cannons_list[0].draw(cannon_pos_x, cannon_pos_y)
-    
+
     cannons.update(GAME_DISPLAY)
-    # bullets.update()
     herd_of_zombies.update()
     scoreSprite.update()
 
@@ -150,25 +148,24 @@ while running:
         scoreboard.increment_wave()
         herd_of_zombies = make_zombie_herd(size_of_herd)
 
-    # If 10 secs passed since last wave, then release the next zombie wave 
+    # If 10 secs passed since last wave, then release the next zombie wave
     if not gates_of_hell_open:
         if time.time() - begin_wait_time >= 10:
             gates_of_hell_open = True
 
-    # If zombie waves are allowed to attack AND the game is not over, then 
+    # If zombie waves are allowed to attack AND the game is not over, then
     # move the zombie wave across the screen
     if gates_of_hell_open and not game_over:
         move_zombie_herd(herd_of_zombies)
 
     if not game_over:
         cannons.draw(GAME_DISPLAY)
-        # bullets.draw(GAME_DISPLAY)
         herd_of_zombies.draw(GAME_DISPLAY)
         scoreSprite.draw(GAME_DISPLAY)
-    
-    if scoreboard.score >= 1:
+
+    if scoreboard.score >= 100:
         game_over = True
-    
+
     # If game over is true, draw Game Over and display player's stats
     if game_over:
         display_game_over()
@@ -177,36 +174,26 @@ while running:
     for cannon in cannons:
         zombies_in_radius = pygame.sprite.spritecollide(cannon, herd_of_zombies, False, collided=pygame.sprite.collide_circle)
         if zombies_in_radius:
-            # print("Zombie within {} of cannon".format(cannon.radius))
             for zombie in zombies_in_radius:
-                print(zombie.rect.x, zombie.rect.y)
-                bullet = Bullet(cannon.rect.x, cannon.rect.y)
-                bullets.add(bullet)
-            
-            bullets.update("north", zombie.rect.x, zombie.rect.y)
-            bullets.draw(GAME_DISPLAY)
-            
-            # Check for bullet - zombie collisions
-            for bullet in bullets:
-                hit_list = pygame.sprite.spritecollide(bullet, herd_of_zombies, True)
-                for hit_zombie in hit_list:
-                    bullets.remove(bullet)
-                    herd_of_zombies.remove(hit_zombie)
-        
-                if bullet.rect.x < 0:
-                    bullets.remove(bullet)
-                    
-            bullets.update("north", zombie.rect.x, zombie.rect.y)
-            bullets.draw(GAME_DISPLAY)
-            
-                
-        # bullets.draw(GAME_DISPLAY)
+                cannon.shoot(zombie.rect.x, zombie.rect.y, GAME_DISPLAY)
 
+                # Now check for bullet - zombie collisions
+                hit_list = pygame.sprite.spritecollide(zombie, cannon.bullets, True)
+                if hit_list:
+                    for bullet in hit_list:
+                        bullets.remove(bullet)
+                        herd_of_zombies.remove(zombie)
+                    cannon.bullets.empty()
+                        
+    # cannon.bullets.empty()
+
+        
+            
     pygame.display.update()
 
     # Will block execution until 1/60 secs have passed since the previous
     # time clock.tick was called.
-    CLOCK.tick(60)
+    CLOCK.tick(FPS)
 
 pygame.display.quit()
 quit()
