@@ -93,7 +93,7 @@ scoreboard = Scoreboard()
 cannons = pygame.sprite.Group()
 bullets = pygame.sprite.Group()
 score_sprite = pygame.sprite.Group(scoreboard)
-button = Button(GAME_DISPLAY, BROWN, 10, 540, 50, 50)
+button = Button(10, 480, 100, 100)
 button_sprite = pygame.sprite.Group(button)
 
 x_mouse = 0
@@ -102,7 +102,6 @@ firing_rate = 0
 game_over = False
 button_clicked = False
 dragging = False
-display_cannon = Cannon(25, 552)
 drag_cannon = Cannon(25, 552)
 
 # Game loop
@@ -135,7 +134,7 @@ while running:
     cannon_pos_x = cannon_pos[0]
     cannon_pos_y = cannon_pos[1]
 
-    if 10 <= cannon_pos_x <= 60 and 540 <= cannon_pos_y <= 590 and button_clicked:
+    if 10 <= cannon_pos_x <= 130 and 470 <= cannon_pos_y <= 590 and button_clicked:
         button_sprite.update("shrink")
         dragging = True
     elif dragging:
@@ -144,7 +143,6 @@ while running:
     if button_clicked and dragging and scoreboard.cannons > 0:
         drag_cannon.display(GAME_DISPLAY, cannon_pos_x, cannon_pos_y)
 
-    display_cannon.display(GAME_DISPLAY, display_cannon.rect.x, display_cannon.rect.y)
 
     # Check if the wave of zombies is empty, start the timer, don't allow waves
     # increment size of herd, and create a new herd to send as next wave
