@@ -121,8 +121,7 @@ while running:
     cannon_pos = pygame.mouse.get_pos()
     cannon_pos_x = cannon_pos[0]
     cannon_pos_y = cannon_pos[1]
-    if cannons_list and button_clicked and dragging:
-        cannons_list[0].draw(cannon_pos_x, cannon_pos_y)
+    
 
     cannons.update(GAME_DISPLAY)
     herd_of_zombies.update()
@@ -137,6 +136,9 @@ while running:
         pygame.draw.rect(GAME_DISPLAY, GREEN, pygame.Rect(50, 500, 50, 50))
     else:
         pygame.draw.rect(GAME_DISPLAY, BLACK, pygame.Rect(50, 500, 50, 50))
+
+    if button_clicked and dragging:
+        pygame.draw.rect(GAME_DISPLAY, BLACK, pygame.Rect(cannon_pos_x, cannon_pos_y, 25, 25))
 
 
     # Check if the wave of zombies is empty, start the timer, don't allow waves
