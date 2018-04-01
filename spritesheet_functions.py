@@ -16,7 +16,7 @@ class SpriteSheet(object):
         # Load the sprite sheet.
         self.sprite_sheet = pygame.image.load(file_name).convert()
 
-    def get_image(self, x, y, width, height):
+    def get_image(self, x, y, width, height, object_type):
         """
             Grab a single image out of a larger spritesheet
             Pass in the x, y location of the sprite
@@ -30,7 +30,10 @@ class SpriteSheet(object):
         image.blit(self.sprite_sheet, (0, 0), (x, y, width, height))
 
         # Assuming white works as the transparent color
-        image.set_colorkey((255, 255, 255))
+        if object_type == "zombie":
+            image.set_colorkey((255, 255, 255))
+        elif object_type == "cannon":
+            image.set_colorkey((0, 0, 0))
 
         # Return the image
         return image
