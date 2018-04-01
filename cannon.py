@@ -15,8 +15,8 @@ class Cannon(pygame.sprite.Sprite):
 
     def __init__(self, x, y):
         super().__init__()
-        sprite_sheet = SpriteSheet("wallturret.png")
-        self.image = sprite_sheet.get_image(12, 50, 20, 20)
+        sprite_sheet = SpriteSheet("towers.png")
+        self.image = sprite_sheet.get_image(1, 1, 100, 100)
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
