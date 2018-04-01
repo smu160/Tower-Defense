@@ -26,12 +26,12 @@ class Zombie(pygame.sprite.Sprite):
 
         spritesheet = SpriteSheet("Apple_Zombie.png")
         self.walking_frames_list = list()
-        self.walking_frames_list.append(spritesheet.get_image(63, 65, 52, 63))
-        self.walking_frames_list.append(spritesheet.get_image(126, 65, 52, 63))
-        self.walking_frames_list.append(spritesheet.get_image(191, 65, 52, 63))
-        self.walking_frames_list.append(spritesheet.get_image(255, 65, 52, 63))
-        self.walking_frames_list.append(spritesheet.get_image(319, 65, 52, 63))
-        self.walking_frames_list.append(spritesheet.get_image(384, 65, 52, 63))
+        self.walking_frames_list.append(spritesheet.get_image(63, 65, 52, 63, "zombie"))
+        self.walking_frames_list.append(spritesheet.get_image(126, 65, 52, 63, "zombie"))
+        self.walking_frames_list.append(spritesheet.get_image(191, 65, 52, 63, "zombie"))
+        self.walking_frames_list.append(spritesheet.get_image(255, 65, 52, 63, "zombie"))
+        self.walking_frames_list.append(spritesheet.get_image(319, 65, 52, 63, "zombie"))
+        self.walking_frames_list.append(spritesheet.get_image(384, 65, 52, 63, "zombie"))
         self.image = self.walking_frames_list[self.list_index]
         self.rect = self.image.get_rect()
 
