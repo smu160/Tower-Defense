@@ -13,7 +13,7 @@ class Cannon(pygame.sprite.Sprite):
 
     cannon_count = 0
 
-    def __init__(self, x, y):
+    def __init__(self, coord_pair):
         super().__init__()
         spritesheet = SpriteSheet("towers.png")
         self.cannon_frames_list = list()
@@ -36,10 +36,8 @@ class Cannon(pygame.sprite.Sprite):
         self.list_index = 0
         self.image = self.cannon_frames_list[self.list_index]
         self.rect = self.image.get_rect()
-        self.x = x
-        self.y = y
-        self.rect.x = self.x
-        self.rect.y = self.y
+        self.rect.x = coord_pair[0]
+        self.rect.y = coord_pair[1]
         self.radius = 175
         self.bullets = pygame.sprite.Group()
         self.firing_rate = 0
