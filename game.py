@@ -63,7 +63,7 @@ class Game(object):
             zombie_group: the zombie sprite group to be moved along the display
         """
         for zomb in zombie_group:
-            if zomb.x > self.game_display.get_height():
+            if zomb.x > self.game_display.get_width():
                 zombie_group.remove(zomb)
                 self.scoreboard.score += 1
 
