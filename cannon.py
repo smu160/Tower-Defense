@@ -11,8 +11,6 @@ from spritesheet_functions import SpriteSheet
 class Cannon(pygame.sprite.Sprite):
     "Common base class for all cannons"
 
-    cannon_count = 0
-
     def __init__(self, coord_pair):
         super().__init__()
         spritesheet = SpriteSheet("towers.png")
@@ -45,11 +43,11 @@ class Cannon(pygame.sprite.Sprite):
         self.cannons = 5
 
     def update(self):
-        """Move a zombie"""
+        "Make the tower image active"
         if self.m % 30 == 0:
             self.list_index += 1
-            self.image = self.cannon_frames_list[self.list_index] 
-        self.m += 1   
+            self.image = self.cannon_frames_list[self.list_index]
+        self.m += 1
 
         if self.list_index == len(self.cannon_frames_list)-1:
             self.list_index = 0
@@ -89,4 +87,3 @@ class Cannon(pygame.sprite.Sprite):
             y: the y component of where the cannon picture should be blitted
         """
         game_display.blit(self.image, (x, y))
-
