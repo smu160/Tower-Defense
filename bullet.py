@@ -34,7 +34,7 @@ class Bullet(pygame.sprite.Sprite):
 
         # Taking into account the angle, calculate our change_x
         # and change_y. Velocity is how fast the bullet travels.
-        velocity = 15
+        velocity = 10
         self.change_x = math.cos(angle) * velocity
         self.change_y = math.sin(angle) * velocity
 
