@@ -24,7 +24,7 @@ class Game(object):
         self.clock = pygame.time.Clock()
         self.game_display = pygame.display.set_mode((disp_width, disp_height))
         pygame.display.set_caption("Tower Defense")
-        self.background_img = pygame.image.load("background.png").convert()
+        self.background_img = pygame.image.load("grass.jpg").convert()
         self.scoreboard = Scoreboard()
         self.running = True
         self.herd_size = 10
