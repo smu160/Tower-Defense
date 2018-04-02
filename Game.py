@@ -154,8 +154,8 @@ class Game(object):
             # If 10 secs passed since last wave, then release the next zombie wave
             if not waves_allowed:
                 if self.tick_count == 600:
-                    self.scoreboard.cannons += (self.scoreboard.cannon_cash // 25)
-                    self.scoreboard.cannon_cash = (self.scoreboard.cannon_cash % 25)
+                    self.scoreboard.cannons += (self.scoreboard.cannon_cash // 50)
+                    self.scoreboard.cannon_cash = (self.scoreboard.cannon_cash % 50)
                 self.display_warning(self.tick_count)
                 self.tick_count -= 1
                 if self.tick_count == 0:
@@ -181,7 +181,7 @@ class Game(object):
                 self.display_game_over()
 
             # Check if zombie is within radius of any cannon
-            if not game_over:
+            if not game_over and waves_allowed:
                 for cannon in cannons:
                     zombies_in_radius = pygame.sprite.spritecollide(cannon, zombies_sprite, False, collided=pygame.sprite.collide_circle)
                     if zombies_in_radius:
