@@ -57,5 +57,4 @@ class Zombie(pygame.sprite.Sprite):
         print("Coordinates: ({}, {})".format(self.x, self.y))
 
     def __del__(self):
-        print("zombie deleted")
-        self.zombie_count -= 1
+        Zombie.zombie_count -= 1
