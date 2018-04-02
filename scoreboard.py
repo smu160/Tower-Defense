@@ -6,6 +6,8 @@ Created on Fri Mar 30 21:30:13 2018
 """
 import pygame
 
+YELLOW = (255, 255, 0)
+
 class Scoreboard(pygame.sprite.Sprite):
     "Common base class for all scoreboards"
 
@@ -14,20 +16,24 @@ class Scoreboard(pygame.sprite.Sprite):
         self.score = 0 # Score is the same as zombies past perimeter
         self.wave = 1
         self.cannon_cash = 0
-        # self.total_kills = 0
+        self.total_kills = 0
         self.zombies_killed = 0
-        self.text = str()
         self.font = pygame.font.SysFont("None", 30)
-        self.cannons = 5
+        self.text = "zombies past perimeter: {}".format(self.score) 
+        self.text += " | wave: {}".format(self.wave)
+        self.text += " | zombies killed: {}".format(self.zombies_killed)
+        self.image = self.font.render(self.text, 1, YELLOW)
+        self.rect = self.image.get_rect()
+        self.cannons = 3
 
     def update(self):
         "Updates the game scoreboard"
-        self.text = "zombies past perimeter: {}".format(self.score)
+        self.text = "zombies past perimeter: {}".format(self.score) 
         self.text += " | wave: {}".format(self.wave)
         self.text += " | zombies killed: {}".format(self.zombies_killed)
-        self.text += " | cannons available: {}".format(self.cannons)
-        self.image = self.font.render(self.text, 1, (255, 255, 0))
+        self.image = self.font.render(self.text, 1, YELLOW)
         self.rect = self.image.get_rect()
+        
 
     def increment_score(self):
         "Increments the score (the zombies paster the defense perimeter)"
