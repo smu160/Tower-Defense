@@ -14,7 +14,7 @@ class Bullet(pygame.sprite.Sprite):
 
     def __init__(self, start_x, start_y, end_x, end_y):
         super().__init__()
-        self.image = pygame.Surface([3, 1])
+        self.image = pygame.Surface([5, 3])
         self.image.fill(self.BLACK)
         self.rect = self.image.get_rect()
         self.rect.x = start_x
