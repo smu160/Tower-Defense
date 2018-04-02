@@ -17,7 +17,7 @@ class Game(object):
     FRAMES_PER_SEC = 60
 
     # The amount of zombies allowed past the perimeter before game over
-    ZOMBIE_THRESH = 10
+    ZOMBIE_THRESH = 20
 
     def __init__(self, disp_width, disp_height):
         pygame.init()
@@ -27,10 +27,10 @@ class Game(object):
         self.background_img = pygame.image.load("grass.jpg").convert()
         self.scoreboard = Scoreboard()
         self.running = True
-        self.herd_size = 10
-        self.tick_count = 600 # Time to wait before the next wave of zombies
+        self.herd_size = 15
+        self.tick_count = 300 # Time to wait before the next wave of zombies
 
-    def make_zombie_herd(self, num_of_zombies):
+    def make_zombie_herd(self, num_of_zombies, zombie_health, delta):
         """Creates a herd of zombies
 
         Creates a list of zombies generated in random positions on the screen
@@ -47,7 +47,10 @@ class Game(object):
         for _ in range(num_of_zombies):
             start_x = random.randint(-1050, -50)
             start_y = self.game_display.get_height() * random.uniform(0.1, 0.9)
-            zombie_herd.add(Zombie(start_x, start_y))
+            zombie = Zombie(start_x, start_y)
+            zombie.health = zombie_health
+            zombie.delta = delta
+            zombie_herd.add(zombie)
 
         return zombie_herd
 
@@ -99,10 +102,14 @@ class Game(object):
         drag_cannon = Cannon([25, 552])
         cannon_display = Cannon_Display(self.scoreboard)
         cannon_sprite = pygame.sprite.Group(cannon_display)
-        zombies_sprite = self.make_zombie_herd(self.herd_size)
+        zombie_health = 110
+        delta = 0.9
+        zombies_sprite = self.make_zombie_herd(self.herd_size, zombie_health, delta)
         cannons = pygame.sprite.Group()
         score_sprite = pygame.sprite.Group(self.scoreboard)
         button_sprite = pygame.sprite.Group(button)
+        wave_count = 0 
+        kills_per_cannon = 50
 
 
         # Game loop
@@ -147,20 +154,27 @@ class Game(object):
             # increment size of herd, and create a new herd to send as next wave
             if not zombies_sprite:
                 waves_allowed = False
-                self.herd_size += random.randint(3, 6)
+                self.herd_size += random.randint(9, 13)
                 self.scoreboard.increment_wave()
-                zombies_sprite = self.make_zombie_herd(self.herd_size)
+                wave_count += 1
+                if wave_count != 0 and wave_count % 5 == 0:
+                    zombie_health += 60
+                    delta += 0.1
+                    kills_per_cannon = kills_per_cannon + 25
+                else:
+                    zombie_health += 20
+                zombies_sprite = self.make_zombie_herd(self.herd_size, zombie_health, delta)
 
             # If 10 secs passed since last wave, then release the next zombie wave
             if not waves_allowed:
-                if self.tick_count == 600:
-                    self.scoreboard.cannons += (self.scoreboard.cannon_cash // 50)
-                    self.scoreboard.cannon_cash = (self.scoreboard.cannon_cash % 50)
+                if self.tick_count == 300:
+                    self.scoreboard.cannons += (self.scoreboard.cannon_cash // kills_per_cannon)
+                    self.scoreboard.cannon_cash = (self.scoreboard.cannon_cash % kills_per_cannon)
                 self.display_warning(self.tick_count)
                 self.tick_count -= 1
                 if self.tick_count == 0:
                     waves_allowed = True
-                    self.tick_count = 600
+                    self.tick_count = 300
 
             # If zombie waves are allowed to attack AND the game is not over,
             # then move the zombie wave across the screen
