@@ -19,7 +19,7 @@ class Zombie(pygame.sprite.Sprite):
         super().__init__()
         self.x = x
         self.y = y
-        self.health = 100
+        self.health = 200
         self.list_index = 0
         self.even_or_odd = "even"
         Zombie.zombie_count += 1
