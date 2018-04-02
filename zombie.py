@@ -19,10 +19,11 @@ class Zombie(pygame.sprite.Sprite):
         super().__init__()
         self.x = x
         self.y = y
-        self.health = 200
+        self.health = 150
         self.list_index = 0
         self.even_or_odd = "even"
         Zombie.zombie_count += 1
+        self.delta = 0.9
 
         spritesheet = SpriteSheet("Apple_Zombie.png")
         self.walking_frames_list = list()
@@ -35,9 +36,9 @@ class Zombie(pygame.sprite.Sprite):
         self.image = self.walking_frames_list[self.list_index]
         self.rect = self.image.get_rect()
 
-    def update(self, DELTA=0.9):
+    def update(self):
         """Move a zombie"""
-        self.x += DELTA
+        self.x += self.delta
         if self.even_or_odd == "even":
             self.list_index += 1
             self.image = self.walking_frames_list[self.list_index]
