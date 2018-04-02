@@ -6,6 +6,7 @@ A derivative of the timeless classic, Tower Defense.
 - [ ] Game Over is not displaying
 - [ ] Give option to restart game after game over
 - [ ] Make `time till next wave ...` blit over all other graphics on screen
+- [ ] Display "Welcome" screen with rules and play button
 
 ## Getting Started
 
