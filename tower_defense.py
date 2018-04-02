@@ -5,7 +5,7 @@ Created on Sun Apr  1 19:10:25 2018
 @author: Saveliy Yusufov and Michael Harley
 """
 import pygame
-from Game import Game
+from game import Game
 
 def main():
     "The main function of the entire Tower Defense game"

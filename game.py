@@ -10,7 +10,7 @@ from button import Button
 from cannon import Cannon
 from cannon_display import Cannon_Display
 from scoreboard import Scoreboard
-from Zombie import Zombie
+from zombie import Zombie
 
 
 class Game(object):

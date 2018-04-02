@@ -73,7 +73,7 @@ class Cannon(pygame.sprite.Sprite):
             game_display: the game screen where all of the shooting is drawn
         """
         bullet = Bullet(self.rect.centerx, self.rect.centery, dest_x+3, dest_y+3)
-        if self.firing_rate % 15 == 0:
+        if self.firing_rate % 20 == 0:
             self.bullets.add(bullet)
 
         self.bullets.update()
