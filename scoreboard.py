@@ -49,8 +49,9 @@ class Scoreboard(pygame.sprite.Sprite):
         self.cannon_cash += self.zombies_killed
         print("zombies_killed: {} total kills: {} cannon cash: {}".format(self.zombies_killed, self.total_kills, self.cannon_cash))
         self.zombies_killed = 0
-
+    """
     def increment_cannons_available(self):
         "Increments the amount of cannons the player has available"
-        self.cannons += (self.cannon_cash // 25)
-        self.cannon_cash += (self.cannon_cash % 25)
+        self.cannons += (self.cannon_cash // 50)
+        self.cannon_cash += (self.cannon_cash % 50)
+    """
