@@ -165,6 +165,12 @@ class Game(object):
                     zombie_health += 20
                 zombies_sprite = self.make_zombie_herd(self.herd_size, zombie_health, delta)
 
+            if not game_over:
+                cannons.draw(self.game_display)
+                score_sprite.draw(self.game_display)
+                button_sprite.draw(self.game_display)
+                cannon_sprite.draw(self.game_display)
+
             # If 10 secs passed since last wave, then release the next zombie wave
             if not waves_allowed:
                 if self.tick_count == 300:
@@ -180,12 +186,6 @@ class Game(object):
             # then move the zombie wave across the screen
             if waves_allowed and not game_over:
                 self.move_zombie_herd(zombies_sprite)
-
-            if not game_over:
-                cannons.draw(self.game_display)
-                score_sprite.draw(self.game_display)
-                button_sprite.draw(self.game_display)
-                cannon_sprite.draw(self.game_display)
 
             if self.scoreboard.score >= self.ZOMBIE_THRESH:
                 game_over = True
