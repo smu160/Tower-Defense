@@ -14,8 +14,8 @@ class Bullet(pygame.sprite.Sprite):
 
     def __init__(self, start_x, start_y, end_x, end_y):
         super().__init__()
-        self.image = pygame.Surface([7, 4])
-        self.image.fill(self.BLACK)
+        self.image = pygame.Surface([4, 4])
+        #self.image.fill(self.BLACK)
         self.rect = self.image.get_rect()
         self.rect.x = start_x
         self.rect.y = start_y
@@ -38,7 +38,9 @@ class Bullet(pygame.sprite.Sprite):
         self.change_x = math.cos(angle) * velocity
         self.change_y = math.sin(angle) * velocity
 
-    def update(self):
+        self.m = 0
+
+    def update(self, color):
         "Move the bullet"
         # The floating point x and y hold our more accurate location.
         self.floating_point_y += self.change_y
@@ -47,3 +49,8 @@ class Bullet(pygame.sprite.Sprite):
         # The rect.x and rect.y are converted to integers.
         self.rect.y = int(self.floating_point_y)
         self.rect.x = int(self.floating_point_x)
+
+        if color == "transparent":
+            self.image.set_colorkey(self.BLACK)
+        else:
+            self.image.fill(color)
