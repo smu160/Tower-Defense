@@ -11,6 +11,9 @@ from spritesheet_functions import SpriteSheet
 class Cannon(pygame.sprite.Sprite):
     "Common base class for all cannons"
 
+    BLACK = (0, 0, 0)
+    WHITE = (255, 255, 255)
+
     def __init__(self, coord_pair):
         super().__init__()
         spritesheet = SpriteSheet("towers.png")
@@ -40,6 +43,7 @@ class Cannon(pygame.sprite.Sprite):
         self.bullets = pygame.sprite.Group()
         self.firing_rate = 0
         self.m = 0
+        self.n = 0
         self.cannons = 5
 
     def update(self):
@@ -73,8 +77,11 @@ class Cannon(pygame.sprite.Sprite):
         bullet = Bullet(self.rect.centerx, self.rect.centery, dest_x+3, dest_y+3)
         if self.firing_rate % 16 == 0:
             self.bullets.add(bullet)
-
-        self.bullets.update()
+        if self.n % 12 == 0:
+            self.bullets.update("transparent")
+        else:
+            self.bullets.update(self.BLACK)
+        self.n += 1
         self.bullets.draw(game_display)
         self.firing_rate += 1
 
