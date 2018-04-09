@@ -3,11 +3,11 @@
 A derivative of the timeless classic, Tower Defense. 
 
 ### TODO
-- [ ] Game Over is not displaying
+- [x] Fix bug where Game Over is not displaying
 - [ ] Give option to restart game after game over
-- [X] Make `time till next wave ...` blit over all other graphics on screen
+- [X] Make "time till next wave..." blit over all other graphics on screen
 - [ ] Display "Welcome" screen with rules and play button
-- [ ] Make bullets display after every few rounds 
+- [x] Make bullets display after every few rounds 
 
 ## Getting Started
 
