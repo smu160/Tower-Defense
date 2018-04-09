@@ -89,6 +89,7 @@ class Game(object):
         text_y = self.game_display.get_height() / 2 - text_rect.height / 2
         wave_stats = pygame.font.Font(None, 36).render("You held off {} waves".format(self.scoreboard.wave), True, (255, 255, 0))
         kill_stats = pygame.font.Font(None, 36).render("You killed {} zombies".format(self.scoreboard.zombies_killed), True, (255, 255, 0))
+        self.game_display.blit(text, [text_x, text_y])
         self.game_display.blit(wave_stats, [text_x-25, text_y+50])
         self.game_display.blit(kill_stats, [text_x-20, text_y+100])
 
